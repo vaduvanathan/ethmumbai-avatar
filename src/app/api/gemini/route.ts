@@ -1,32 +1,50 @@
 import { NextRequest, NextResponse } from "next/server";
 
+type GeminiInlineData = {
+  mimeType: string;
+  data: string; // base64
+};
+
 export async function POST(req: NextRequest) {
   try {
-    const { prompt } = await req.json();
+    const { imageBase64, mimeType, prompt } = await req.json();
     const apiKey = process.env.GEMINI_API_KEY;
 
     if (!apiKey) {
       return NextResponse.json({ error: "Missing GEMINI_API_KEY" }, { status: 500 });
     }
 
+    if (!imageBase64 || !mimeType) {
+      return NextResponse.json({ error: "imageBase64 and mimeType are required" }, { status: 400 });
+    }
+
+    const userPrompt =
+      prompt ||
+      "Restyle this portrait into an ETHMumbai-branded avatar: use BEST Red (#e2231a), Bus Black (#1c1c1c), ETH Blue (#3fa9f5), Bus Yellow (#ffd600), and add subtle BEST bus/Mumbai skyline cues while keeping facial likeness.";
+
+    const body = {
+      contents: [
+        {
+          role: "user",
+          parts: [
+            { text: userPrompt },
+            {
+              inlineData: {
+                mimeType,
+                data: imageBase64,
+              },
+            },
+          ],
+        },
+      ],
+    };
+
     const res = await fetch(
-      "https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=" + apiKey,
+      "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=" + apiKey,
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          contents: [
-            {
-              parts: [
-                {
-                  text:
-                    prompt ||
-                    "Generate a playful ETHMumbai avatar description blending BEST bus vibes, Mumbai skyline, and cheerful color palette.",
-                },
-              ],
-            },
-          ],
-        }),
+        body: JSON.stringify(body),
       }
     );
 
@@ -36,7 +54,17 @@ export async function POST(req: NextRequest) {
     }
 
     const data = await res.json();
-    return NextResponse.json(data);
+    const parts = data?.candidates?.[0]?.content?.parts || [];
+    const inline = parts.find((p: any) => p.inlineData) as { inlineData?: GeminiInlineData } | undefined;
+
+    if (!inline?.inlineData?.data || !inline.inlineData.mimeType) {
+      return NextResponse.json({ error: "No image returned from Gemini" }, { status: 502 });
+    }
+
+    return NextResponse.json({
+      mimeType: inline.inlineData.mimeType,
+      imageBase64: inline.inlineData.data,
+    });
   } catch (error: any) {
     return NextResponse.json({ error: error?.message || "Unknown error" }, { status: 500 });
   }
