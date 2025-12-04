@@ -1,0 +1,189 @@
+@import "tailwindcss";
+
+:root {
+  /* ETHMumbai brand palette */
+  --best-red: #e2231a;
+  --bus-black: #1c1c1c;
+  --bus-yellow: #ffd600;
+  --bus-green: #00a859;
+  --eth-blue: #3fa9f5;
+  --white: #ffffff;
+
+  --background: #ffffff;
+  --foreground: #1c1c1c;
+  --muted: #f6f7f9;
+  --card: #ffffff;
+  --border: #e6e6e6;
+
+  --shadow-strong: 0 20px 60px rgba(0, 0, 0, 0.16);
+  --shadow-soft: 0 8px 30px rgba(0, 0, 0, 0.08);
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-body);
+  --font-head: var(--font-headline);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #090909;
+    --foreground: #f1f1f1;
+    --card: #121212;
+    --border: #2a2a2a;
+    --muted: #111318;
+  }
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  background: radial-gradient(circle at 20% 20%, rgba(63, 169, 245, 0.08), transparent 28%),
+    radial-gradient(circle at 80% 0%, rgba(226, 35, 26, 0.08), transparent 30%),
+    var(--background);
+  color: var(--foreground);
+  font-family: var(--font-body), "Inter", system-ui, -apple-system, sans-serif;
+  margin: 0;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.hero-grid {
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-grid::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: linear-gradient(90deg, rgba(255, 214, 0, 0.08) 0%, rgba(0, 0, 0, 0) 40%),
+    linear-gradient(180deg, rgba(0, 168, 89, 0.06) 0%, rgba(0, 0, 0, 0) 55%);
+  pointer-events: none;
+}
+
+.glass-card {
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  box-shadow: var(--shadow-soft);
+  backdrop-filter: blur(14px);
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  border-radius: 999px;
+  background: rgba(226, 35, 26, 0.08);
+  color: var(--best-red);
+  font-weight: 700;
+  font-size: 0.85rem;
+}
+
+.pill {
+  border-radius: 999px;
+  padding: 6px 12px;
+  border: 1px solid var(--border);
+  background: var(--card);
+}
+
+.cta-button {
+  background: linear-gradient(120deg, var(--best-red), #ff5a3d);
+  color: #fff;
+  border: none;
+  border-radius: 14px;
+  padding: 14px 20px;
+  font-weight: 700;
+  box-shadow: 0 14px 40px rgba(226, 35, 26, 0.35);
+  cursor: pointer;
+  transition: transform 140ms ease, box-shadow 140ms ease, filter 140ms ease;
+}
+
+.cta-button:hover {
+  transform: translateY(-1px);
+  filter: brightness(1.05);
+}
+
+.cta-button.secondary {
+  background: var(--bus-black);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.35);
+}
+
+.card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  box-shadow: var(--shadow-soft);
+}
+
+.pattern {
+  background-image: radial-gradient(circle at 1px 1px, rgba(28, 28, 28, 0.08) 1px, transparent 0);
+  background-size: 28px 28px;
+}
+
+.avatar-frame {
+  position: relative;
+  border-radius: 22px;
+  overflow: hidden;
+  background: linear-gradient(135deg, rgba(226, 35, 26, 0.9), rgba(63, 169, 245, 0.85));
+  border: 2px solid #ffffff;
+  box-shadow: var(--shadow-strong);
+}
+
+.overlay-chip {
+  background: rgba(0, 0, 0, 0.55);
+  color: #fff;
+  border-radius: 12px;
+  padding: 6px 10px;
+  font-size: 12px;
+  position: absolute;
+  left: 12px;
+  bottom: 12px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.bg-option {
+  border-radius: 12px;
+  height: 56px;
+  border: 1px solid var(--border);
+  cursor: pointer;
+  transition: transform 120ms ease, box-shadow 120ms ease, border 120ms ease;
+}
+
+.bg-option:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-soft);
+}
+
+.bg-option.selected {
+  border: 2px solid var(--best-red);
+  box-shadow: 0 0 0 4px rgba(226, 35, 26, 0.12);
+}
+
+.upload-drop {
+  border: 1.5px dashed var(--border);
+  border-radius: 16px;
+  padding: 20px;
+  text-align: center;
+  background: var(--muted);
+  transition: border 120ms ease, background 120ms ease;
+}
+
+.upload-drop:hover {
+  border-color: var(--best-red);
+  background: rgba(226, 35, 26, 0.06);
+}
+
+.footer-note {
+  color: #5c5c5c;
+  font-size: 0.9rem;
+}
