@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo, useRef, useState } from "react";
-import Image from "next/image";
+import NextImage from "next/image";
 
 type BgOption = {
   id: string;
@@ -110,7 +110,7 @@ export default function Home() {
     }
 
     try {
-      const img = new Image();
+      const img = new window.Image();
       img.crossOrigin = "anonymous";
       const url = (resultUrl || sourceUrl) as string;
 
@@ -255,9 +255,9 @@ export default function Home() {
                 style={{ background: selectedBg.gradient }}
               >
                 {resultUrl ? (
-                  <Image src={resultUrl} alt="Styled avatar" fill className="object-cover" />
+                  <NextImage src={resultUrl} alt="Styled avatar" fill className="object-cover" />
                 ) : sourceUrl ? (
-                  <Image src={sourceUrl} alt="Source" fill className="object-cover" />
+                  <NextImage src={sourceUrl} alt="Source" fill className="object-cover" />
                 ) : (
                   <div className="text-white/85 text-center px-6">
                     <p className="text-lg font-semibold">Upload to style</p>
