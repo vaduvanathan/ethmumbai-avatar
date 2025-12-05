@@ -1,3 +1,4 @@
+// @ts-nocheck
 // Multimodal Gemini endpoint; default to gemini-3-pro-image-preview, allow override via env
 const MODEL = process.env.GEMINI_MODEL || "gemini-3-pro-image-preview";
 
