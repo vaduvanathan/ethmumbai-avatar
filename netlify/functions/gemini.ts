@@ -1,7 +1,7 @@
 import type { Handler } from "@netlify/functions";
 
-// Use a multimodal Gemini endpoint (1.5 Flash as a proxy for 2.5 flash when generally available)
-const MODEL = "gemini-1.5-flash";
+// Multimodal Gemini endpoint; default to latest 1.5 flash, allow override for newer (e.g., gemini-2.0-flash or gemini-2.5-flash when available)
+const MODEL = process.env.GEMINI_MODEL || "gemini-1.5-flash-latest";
 
 export const handler: Handler = async (event) => {
   try {
@@ -50,7 +50,7 @@ export const handler: Handler = async (event) => {
     };
 
     const response = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/${MODEL}:generateContent?key=${process.env.GEMINI_API_KEY}`,
+      `https://generativelanguage.googleapis.com/v1/models/${MODEL}:generateContent?key=${process.env.GEMINI_API_KEY}`,
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },
