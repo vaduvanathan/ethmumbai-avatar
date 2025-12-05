@@ -6,6 +6,9 @@ type GeminiInlineData = {
   data: string; // base64
 };
 
+export const runtime = "nodejs";
+export const dynamic = "force-dynamic";
+
 export async function POST(req: NextRequest) {
   try {
     const { imageBase64, mimeType, prompt } = await req.json();
