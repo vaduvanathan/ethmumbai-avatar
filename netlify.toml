@@ -4,9 +4,7 @@
   functions = "netlify/functions"
 
 [functions]
-  node_bundler = "esbuild"[build]
-  command = "npm run build"
-  publish = ".next"
+  node_bundler = "esbuild"
 
 [[plugins]]
   package = "@netlify/plugin-nextjs"
