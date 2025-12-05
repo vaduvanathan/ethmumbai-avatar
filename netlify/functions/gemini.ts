@@ -5,6 +5,18 @@ const MODEL = process.env.GEMINI_MODEL || "gemini-3-pro-image-preview";
 
 export const handler: Handler = async (event) => {
   try {
+    // Support GET to list available models (debugging)
+    if (event.httpMethod === "GET") {
+      const listRes = await fetch(
+        `https://generativelanguage.googleapis.com/v1/models?key=${process.env.GEMINI_API_KEY}`
+      );
+      const list = await listRes.json();
+      return {
+        statusCode: listRes.status,
+        body: JSON.stringify(list, null, 2),
+      };
+    }
+
     if (!process.env.GEMINI_API_KEY) {
       return {
         statusCode: 500,
