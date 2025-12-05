@@ -1,7 +1,7 @@
 import type { Handler } from "@netlify/functions";
 
-// Multimodal Gemini endpoint; default to 2.5 flash image, allow override via env
-const MODEL = process.env.GEMINI_MODEL || "gemini-2.5-flash-image";
+// Multimodal Gemini endpoint; default to gemini-3-pro-image-preview, allow override via env
+const MODEL = process.env.GEMINI_MODEL || "gemini-3-pro-image-preview";
 
 export const handler: Handler = async (event) => {
   try {
