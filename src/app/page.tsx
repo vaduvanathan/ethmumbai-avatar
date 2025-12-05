@@ -57,7 +57,7 @@ export default function Home() {
       const buffer = await file.arrayBuffer();
       const base64 = arrayBufferToBase64(buffer);
 
-      const res = await fetch("/api/gemini", {
+      const res = await fetch("/.netlify/functions/gemini", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
