@@ -1,7 +1,7 @@
 import type { NextConfig } from "next";
 
+// Netlify + Next.js app router: avoid standalone output so API routes deploy as functions
 const nextConfig: NextConfig = {
-  output: "standalone",
   /* config options here */
 };
 
