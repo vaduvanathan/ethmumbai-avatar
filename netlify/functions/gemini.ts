@@ -1,11 +1,9 @@
-import type { Handler } from "@netlify/functions";
-
 // Multimodal Gemini endpoint; default to gemini-3-pro-image-preview, allow override via env
 const MODEL = process.env.GEMINI_MODEL || "gemini-3-pro-image-preview";
 
-export const handler: Handler = async (event) => {
+exports.handler = async (event) => {
   try {
-    // Support GET to list available models (debugging)
+    // GET: list available models (debugging)
     if (event.httpMethod === "GET") {
       const listRes = await fetch(
         `https://generativelanguage.googleapis.com/v1/models?key=${process.env.GEMINI_API_KEY}`
@@ -79,12 +77,10 @@ export const handler: Handler = async (event) => {
     }
 
     const data = await response.json();
-    const parts = data?.candidates?.[0]?.content?.parts || [];
-    const inline = parts.find((p: any) => p.inlineData) as
-      | { inlineData?: { mimeType: string; data: string } }
-      | undefined;
+    const parts = (data && data.candidates && data.candidates[0] && data.candidates[0].content && data.candidates[0].content.parts) || [];
+    const inline = parts.find((p) => p.inlineData);
 
-    if (!inline?.inlineData?.data || !inline.inlineData.mimeType) {
+    if (!inline || !inline.inlineData || !inline.inlineData.data || !inline.inlineData.mimeType) {
       return {
         statusCode: 502,
         body: JSON.stringify({ error: "No image returned from Gemini" }),
@@ -98,10 +94,10 @@ export const handler: Handler = async (event) => {
         imageBase64: inline.inlineData.data,
       }),
     };
-  } catch (error: any) {
+  } catch (error) {
     return {
       statusCode: 500,
-      body: JSON.stringify({ error: error?.message || "Unknown error" }),
+      body: JSON.stringify({ error: (error as any)?.message || "Unknown error" }),
     };
   }
 };
