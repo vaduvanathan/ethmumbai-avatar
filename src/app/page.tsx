@@ -77,6 +77,7 @@ export default function Home() {
       setResultUrl(out);
       setStatus("Avatar styled. Ready to download.");
     } catch (err: any) {
+      console.log("Error styling image:", err);
       console.error(err);
       setStatus("Could not style image. Try again.");
     } finally {
