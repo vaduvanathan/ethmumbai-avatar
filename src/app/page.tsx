@@ -68,24 +68,18 @@ export default function Home() {
         }),
       });
 
-      const data = await res.json();
-      if (!res.ok || data.error) {
-        throw new Error(data.error || "Gemini error");
+      if (!res.ok) {
+        const errorData = await res.json();
+        throw new Error(errorData.error || "An unknown error occurred");
       }
 
+      const data = await res.json();
       const out = `data:${data.mimeType};base64,${data.imageBase64}`;
       setResultUrl(out);
       setStatus("Avatar styled. Ready to download.");
     } catch (err: any) {
       console.error(err);
-      try {
-        // Errors from our API route will be JSON strings in the message property
-        const jsonError = JSON.parse(err.message);
-        console.log("Error from API:", jsonError.error);
-        setStatus(`Error: ${jsonError.error}`);
-      } catch (e) {
-        setStatus("Could not style image. Try again.");
-      }
+      setStatus(`Error: ${err.message}`);
     } finally {
       setIsLoading(false);
     }
