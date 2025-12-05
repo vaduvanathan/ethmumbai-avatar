@@ -57,10 +57,20 @@ export async function POST(req: NextRequest) {
     }
 
     const data = await res.json();
+    console.log("Gemini API Response:", JSON.stringify(data, null, 2));
+
     const parts = data?.candidates?.[0]?.content?.parts || [];
     const inline = parts.find((p: any) => p.inlineData) as { inlineData?: GeminiInlineData } | undefined;
 
     if (!inline?.inlineData?.data || !inline.inlineData.mimeType) {
+      // Log the finish reason if it exists
+      const finishReason = data?.candidates?.[0]?.finishReason;
+      if (finishReason) {
+        console.error("Image generation failed with reason:", finishReason);
+        if (finishReason === "SAFETY") {
+          return NextResponse.json({ error: "Image generation blocked due to safety settings." }, { status: 400 });
+        }
+      }
       return NextResponse.json({ error: "No image returned from Gemini" }, { status: 502 });
     }
 
